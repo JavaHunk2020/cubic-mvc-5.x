@@ -13,6 +13,10 @@
 	<!-- Enable spring mvc features @RequestMapping, @ResponseBody, Server side 
 		validation -->
 	<mvc:annotation-driven />
+	
+	<!-- Mapping static resources allow contents from this folder -->
+	<mvc:resources mapping="/img/**" location="/img/" />
+	
 
 	<!-- This is the package name in which controller resides -->
 	<context:component-scan base-package="com.cubicit.controller" />
