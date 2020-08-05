@@ -39,6 +39,13 @@
 	    <version>5.0.1.RELEASE</version>
 	</dependency>
 	
+		<!-- one dependency tag means one jar!!! -->
+	<dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+		<version>8.0.11</version>
+	</dependency>
+	
 	<!-- Spring mvc dependency -->
 	<dependency>
 	    <groupId>org.springframework</groupId>
@@ -69,12 +76,7 @@
 
 	<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 	
-	<!-- one dependency tag means one jar!!! -->
-	<dependency>
-		<groupId>mysql</groupId>
-		<artifactId>mysql-connector-java</artifactId>
-		<version>8.0.11</version>
-	</dependency>
+
   
   </dependencies>
 </project>
