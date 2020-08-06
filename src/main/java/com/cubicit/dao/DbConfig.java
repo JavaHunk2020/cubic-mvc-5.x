@@ -1,4 +1,4 @@
-package com.cubicit.controller;
+package com.cubicit.dao;
 
 import javax.sql.DataSource;
 

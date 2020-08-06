@@ -30,7 +30,15 @@
       <label for="pwd">Password:</label>
       <input type="password" class="form-control"  placeholder="Enter password" name="pswd">
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">Login</button>
+    
+    <a href="obiz">
+    <button type="button" class="btn btn-danger">Add Biz</button>
+    </a>
+    
+     <a href="showBizs">
+    <button type="button" class="btn btn-warning">Show Biz</button>
+    </a>
   </form>
   </div>
 </div>

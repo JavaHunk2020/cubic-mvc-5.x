@@ -1,14 +1,16 @@
-package com.cubicit.controller;
+package com.cubicit.dao;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
-public class BizService {
+import com.cubicit.controller.Biz;
+
+@Repository
+public class BizDao {
 	
 	@Autowired // ByType, @Qualifier ,@ByName
 	private JdbcTemplate jdbcTemplate;

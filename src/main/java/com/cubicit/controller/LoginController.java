@@ -7,18 +7,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.cubicit.dao.BizDao;
+
 @Controller
 public class LoginController {
 	
 	@Autowired
-	private BizService bizService;
+	private BizDao bizDao;
 	
 	//  <form action="authUser" method="POST">
 	@PostMapping({"/authUser"})
 	public String execute(HttpServletRequest req){
 		String username=req.getParameter("username");
 		String password=req.getParameter("pswd");
-		if(bizService.isAuth(username, password)){
+		if(bizDao.isAuth(username, password)){
 			return "home"; // ->> /home.jsp	
 		}else{
 			//Adding message in request scope so that we can access this message on jsp file
