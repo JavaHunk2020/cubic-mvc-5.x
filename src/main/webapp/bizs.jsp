@@ -28,6 +28,7 @@
    <table class="table table-bordered">
     <thead>
       <tr>
+       <th>ID</th>
         <th>Name</th>
         <th>Brand</th>
         <th>DOE</th>
@@ -40,6 +41,7 @@
     for(Biz biz:bizs){
     %>
       <tr>
+       <td style="background-color: #555aff;color:white;"><%=biz.getId() %></td>
         <td><%=biz.getName() %></td>
         <td><%=biz.getBrand() %></td>
         <td><%=biz.getDoe() %></td>
@@ -48,6 +50,11 @@
         <a href="deleteBiz?name=<%=biz.getName() %>">
         <img src="img/delete.png" style="height: 40px;">
         </a>
+        
+        <a href="editBiz?did=<%=biz.getId() %>">
+            <img src="img/edita.png">
+        </a>
+        
         </td>
       </tr>
     <% } %> 

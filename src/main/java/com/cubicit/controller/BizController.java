@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cubicit.dao.BizDao;
 
@@ -39,6 +41,37 @@ public class BizController {
 	@GetMapping({"/obiz"})
 	public String showPage(){
 		return "biz"; // ->> /auth.jsp
+	}
+	
+	
+	@PostMapping({"/editBiz"})
+	public String updateBiz(HttpServletRequest req,Model model){ //this annotation is reading did as integer from request param
+		String name=req.getParameter("name");
+		String brand=req.getParameter("brand");
+		int did=Integer.parseInt(req.getParameter("did"));
+		Biz biz=new Biz();
+		biz.setBrand(brand);
+		biz.setName(name);
+		biz.setId(did);
+		//Here we have to update the data inside database
+		bizDao.update(biz);
+		
+		
+		model.addAttribute("message", "data is update ");
+		
+		//Fetch all new records and add inside model to show on JSP
+		List<Biz> bizs=bizDao.findAll();
+		model.addAttribute("ashma", bizs);
+		return "bizs"; // ->> /bizs.jsp
+	}
+	
+	
+	@GetMapping({"/editBiz"})
+	public String showEditPage(@RequestParam int did,Model model){ //this annotation is reading did as integer from request param
+		Biz biz=bizDao.findById(did);
+		//model means request scope
+		model.addAttribute("pbiz", biz);
+		return "ebiz"; // ->> /ebiz.jsp
 	}
 	
 	//http://localhost:8080/cubic-mvc/deleteBiz?name=Mocha

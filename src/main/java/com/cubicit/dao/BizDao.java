@@ -15,6 +15,16 @@ public class BizDao {
 	@Autowired // ByType, @Qualifier ,@ByName
 	private JdbcTemplate jdbcTemplate;
 	
+	public Biz findById(int did){
+		String sql="select id,name,brand,doe from biz_service_tbl where id = "+did;
+		List<Biz> bizList=jdbcTemplate.query(sql, new BeanPropertyRowMapper(Biz.class));
+		/*if(bizList.size()==1){
+			return bizList.get(0);
+		}
+		return null;*/
+		return bizList.size()==1?bizList.get(0):null;
+	}
+	
 	//true, false
 	public boolean isAuth(String name,String password){
 		List<Biz> bizList=jdbcTemplate.query("select id,name,brand,doe from biz_service_tbl where name =? and brand=?",
@@ -33,6 +43,12 @@ public class BizDao {
 		int rows=jdbcTemplate.update("delete from biz_service_tbl where name = ?",name);
 		String result="Number of row deleted is  = "+rows;
 		return result;
+	}
+	
+	public void update(Biz biz){
+		String sql="update biz_service_tbl set name=?,brand=? where id=?";
+		Object[] data={biz.getName(),biz.getBrand(),biz.getId()};
+		jdbcTemplate.update(sql,data);
 	}
 	
 	public void save(Biz biz){
