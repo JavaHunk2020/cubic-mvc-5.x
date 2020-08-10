@@ -47,7 +47,7 @@
         <td><%=biz.getDoe() %></td>
         <td>
         
-        <a href="deleteBiz?name=<%=biz.getName() %>">
+        <a href="deleteBizId?id=<%=biz.getId() %>">
         <img src="img/delete.png" style="height: 40px;">
         </a>
         

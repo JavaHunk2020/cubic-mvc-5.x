@@ -21,7 +21,7 @@
    <span style="font-size: 18;color: blue;font-weight: bold;">${message}</span>
    <hr/>
    <div style="width: 60%">
-  <form action="obiz" method="POST">
+  <form action="obiz" method="POST" enctype="multipart/form-data">
     <div class="form-group">
       <label>Name:</label>
       <input type="text" class="form-control"  placeholder="Enter Username" name="name">
@@ -30,6 +30,12 @@
       <label for="pwd">Brand:</label>
       <input type="text" class="form-control"  placeholder="Enter password" name="brand">
     </div>
+    
+    <div class="form-group">
+      <label for="ohtot">Photo:</label>
+      <input type="file" class="form-control"  name="file">
+    </div>
+    
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
   </div>

@@ -2,12 +2,25 @@ package com.cubicit.controller;
 
 import java.sql.Timestamp;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Biz {
 	private int id;
 	private String name;
 	private String brand;
 	private Timestamp doe;
+	//This is used store file
+	private MultipartFile file;
 	
+	
+	public MultipartFile getFile() {
+		return file;
+	}
+
+	public void setFile(MultipartFile file) {
+		this.file = file;
+	}
+
 	public Biz(){
 		
 	}

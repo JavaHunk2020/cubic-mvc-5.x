@@ -1,10 +1,15 @@
 package com.cubicit.dao;
 
+import java.io.IOException;
+import java.sql.Types;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.support.SqlLobValue;
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
 
 import com.cubicit.controller.Biz;
@@ -45,16 +50,37 @@ public class BizDao {
 		return result;
 	}
 	
+	public String deleteById(int id){
+		int rows=jdbcTemplate.update("delete from biz_service_tbl where id = ?",id);
+		String result="Number of row deleted is  = "+rows;
+		return result;
+	}
+	
+	
 	public void update(Biz biz){
 		String sql="update biz_service_tbl set name=?,brand=? where id=?";
 		Object[] data={biz.getName(),biz.getBrand(),biz.getId()};
 		jdbcTemplate.update(sql,data);
 	}
 	
+	
+	public byte[] findPhotoById(int dbid){
+		byte[] photo=jdbcTemplate.queryForObject("select photo from biz_service_tbl where id = "+dbid, byte[].class);
+		return photo;
+	}
+	
 	public void save(Biz biz){
-		String sql="insert into biz_service_tbl(name,brand,doe) values(?,?,?)";
-		Object[] data={biz.getName(),biz.getBrand(),biz.getDoe()};
-		jdbcTemplate.update(sql,data);
+		try {
+			byte[] photo=biz.getFile().getBytes();
+			LobHandler lobHandler=new DefaultLobHandler();
+			SqlLobValue sqlLobValue=new SqlLobValue(photo,lobHandler);
+			String sql="insert into biz_service_tbl(name,brand,doe,photo) values(?,?,?,?)";
+			Object[] data={biz.getName(),biz.getBrand(),biz.getDoe(),sqlLobValue};
+			int dataType[] ={Types.VARCHAR,Types.VARCHAR,Types.TIMESTAMP,Types.BLOB};
+			jdbcTemplate.update(sql,data,dataType);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<Biz> findAll(){
