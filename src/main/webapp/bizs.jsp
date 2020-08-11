@@ -23,7 +23,7 @@
    ${message}
    </span>
    <hr/>
-   <div style="width: 80%">
+   <div style="width: 100%">
    
    <table class="table table-bordered">
     <thead>
@@ -32,6 +32,7 @@
         <th>Name</th>
         <th>Brand</th>
         <th>DOE</th>
+        <th>Photo</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -39,12 +40,29 @@
     <%
     List<Biz> bizs=(List<Biz>)request.getAttribute("ashma");
     for(Biz biz:bizs){
+    	List<Integer> cimageIds=biz.getCimageIds();
     %>
       <tr>
        <td style="background-color: #555aff;color:white;"><%=biz.getId() %></td>
         <td><%=biz.getName() %></td>
         <td><%=biz.getBrand() %></td>
         <td><%=biz.getDoe() %></td>
+        <td>
+        
+         <img src="loadPhoto?dbid=<%=biz.getId()%>" style="height: 120px;">
+         
+         <%
+         for(Integer cid:cimageIds){ %>
+         
+         
+         <img src="cloadPhoto?dbid=<%=cid%>" style="height: 120px;">
+         <a href="deleteCPhoto?cid=<%=cid%>"> 
+            <img src="img/del.png">
+         </a>
+        <% } %>
+         
+        </td>
+        
         <td>
         
         <a href="deleteBizId?id=<%=biz.getId() %>">

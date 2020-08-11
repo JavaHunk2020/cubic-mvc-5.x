@@ -33,7 +33,7 @@
     
     <div class="form-group">
       <label for="ohtot">Photo:</label>
-      <input type="file" class="form-control"  name="file">
+      <input type="file" class="form-control"  name="file" multiple="multiple">
     </div>
     
     <button type="submit" class="btn btn-primary">Submit</button>

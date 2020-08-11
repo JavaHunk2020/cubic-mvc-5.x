@@ -87,6 +87,18 @@ public class BizController {
 		return "bizs"; // ->> /bizs.jsp
 	}
 	
+	@GetMapping("/deleteCPhoto")
+	public String deleteCPhoto(@RequestParam int cid,Model model){
+		//deleting the data from the database
+		bizDao.deletecPhoto(cid);
+		//This is showing remining data from the database
+		List<Biz> bizs=bizDao.findAll();
+		model.addAttribute("ashma", bizs);
+		return "bizs"; // ->> /bizs.jsp
+	}
+	
+	
+	
 	//http://localhost:8080/cubic-mvc/deleteBiz?name=Mocha
 		@GetMapping("/deleteBizId")
 		public String deleteById(HttpServletRequest req){
@@ -112,6 +124,18 @@ public class BizController {
 	@GetMapping({"/loadPhoto"})
 	public void renderPhoto(@RequestParam int dbid,HttpServletResponse resp) throws IOException{
 		byte[] photo=bizDao.findPhotoById(dbid);
+		resp.setContentType("image/png");
+		ServletOutputStream outputStream=resp.getOutputStream(); //reference of the body of the response
+		if(photo!=null){
+			outputStream.write(photo);
+			outputStream.flush();
+			outputStream.close();	
+		}
+	}
+	
+	@GetMapping({"/cloadPhoto"})
+	public void crenderPhoto(@RequestParam int dbid,HttpServletResponse resp) throws IOException{
+		byte[] photo=bizDao.cfindPhotoById(dbid);
 		resp.setContentType("image/png");
 		ServletOutputStream outputStream=resp.getOutputStream(); //reference of the body of the response
 		if(photo!=null){

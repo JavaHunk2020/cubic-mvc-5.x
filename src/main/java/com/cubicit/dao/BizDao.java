@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.support.SqlLobValue;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cubicit.controller.Biz;
 
@@ -50,6 +51,16 @@ public class BizDao {
 		return result;
 	}
 	
+	
+	
+	
+	public String deletecPhoto(int id){
+		int rows=jdbcTemplate.update("delete from biz_photos_tbl where bizid = ?",id);
+		String result="Number of row deleted is  = "+rows;
+		return result;
+	}
+	
+	
 	public String deleteById(int id){
 		int rows=jdbcTemplate.update("delete from biz_service_tbl where id = ?",id);
 		String result="Number of row deleted is  = "+rows;
@@ -64,20 +75,48 @@ public class BizDao {
 	}
 	
 	
+	
 	public byte[] findPhotoById(int dbid){
 		byte[] photo=jdbcTemplate.queryForObject("select photo from biz_service_tbl where id = "+dbid, byte[].class);
 		return photo;
 	}
 	
+	public byte[] cfindPhotoById(int dbid){
+		byte[] photo=jdbcTemplate.queryForObject("select photo from biz_photos_tbl where bizid = "+dbid, byte[].class);
+		return photo;
+	}
+	
 	public void save(Biz biz){
 		try {
-			byte[] photo=biz.getFile().getBytes();
-			LobHandler lobHandler=new DefaultLobHandler();
-			SqlLobValue sqlLobValue=new SqlLobValue(photo,lobHandler);
-			String sql="insert into biz_service_tbl(name,brand,doe,photo) values(?,?,?,?)";
-			Object[] data={biz.getName(),biz.getBrand(),biz.getDoe(),sqlLobValue};
-			int dataType[] ={Types.VARCHAR,Types.VARCHAR,Types.TIMESTAMP,Types.BLOB};
-			jdbcTemplate.update(sql,data,dataType);
+			MultipartFile[] multipartFiles=biz.getFile();
+			int pid=0;
+			if(multipartFiles.length>0){
+				byte[] photo=multipartFiles[0].getBytes();
+				LobHandler lobHandler=new DefaultLobHandler();
+				SqlLobValue sqlLobValue=new SqlLobValue(photo,lobHandler);
+				String sql="insert into biz_service_tbl(name,brand,doe,photo) values(?,?,?,?)";
+				Object[] data={biz.getName(),biz.getBrand(),biz.getDoe(),sqlLobValue};
+				//This is just syntax !!!!!!!!!!!!!!!!!!!
+				int dataType[] ={Types.VARCHAR,Types.VARCHAR,Types.TIMESTAMP,Types.BLOB};
+				jdbcTemplate.update(sql,data,dataType);	
+				String maxid="select max(id) from biz_service_tbl";
+				pid=jdbcTemplate.queryForObject(maxid, Integer.class);
+			}
+			int i=0;
+			for(MultipartFile multipartFile:multipartFiles){
+				if(i>0){
+					byte[] photo=multipartFile.getBytes();
+					LobHandler lobHandler=new DefaultLobHandler();
+					SqlLobValue sqlLobValue=new SqlLobValue(photo,lobHandler);
+					String imagesql="insert into biz_photos_tbl(photo,pid) values(?,?)";
+					Object[] data={sqlLobValue,pid};
+					//This is just syntax !!!!!!!!!!!!!!!!!!!
+					int dataType[] ={Types.BLOB,Types.INTEGER};
+					jdbcTemplate.update(imagesql,data,dataType);	
+				}
+				 i++;	
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -85,6 +124,11 @@ public class BizDao {
 	
 	public List<Biz> findAll(){
 		List<Biz> bizList=jdbcTemplate.query("select id,name,brand,doe from biz_service_tbl", new BeanPropertyRowMapper(Biz.class));
+		for(Biz biz:bizList){
+			String sql="select bizid from biz_photos_tbl where pid = "+biz.getId();
+			List<Integer> cimageIds=jdbcTemplate.queryForList(sql,Integer.class);
+			biz.setCimageIds(cimageIds);
+		}
 		return bizList;
 	}
 

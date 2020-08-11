@@ -1,6 +1,7 @@
 package com.cubicit.controller;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,14 +11,23 @@ public class Biz {
 	private String brand;
 	private Timestamp doe;
 	//This is used store file
-	private MultipartFile file;
+	private MultipartFile[] file;
 	
+	private List<Integer> cimageIds;
 	
-	public MultipartFile getFile() {
+	public List<Integer> getCimageIds() {
+		return cimageIds;
+	}
+
+	public void setCimageIds(List<Integer> cimageIds) {
+		this.cimageIds = cimageIds;
+	}
+
+	public MultipartFile[] getFile() {
 		return file;
 	}
 
-	public void setFile(MultipartFile file) {
+	public void setFile(MultipartFile[] file) {
 		this.file = file;
 	}
 
