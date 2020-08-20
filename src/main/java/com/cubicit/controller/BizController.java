@@ -53,6 +53,14 @@ public class BizController {
 		return "redirect:/showBizs"; // ->> //redirect means we do not want to go to JSP
 	}
 	
+	
+	@GetMapping({"/rotateImageRight"})
+	public String rotateImageRight(@RequestParam int dbid,Model model){
+		 bizDao.rotateImageRight(dbid);
+		return "redirect:/showBizs"; // ->> //redirect means we do not want to go to JSP
+	}
+	
+	
 	@GetMapping({"/showBizs"})
 	public String showBizsData(Model model){
 		List<Biz> bizs=bizDao.findAll();

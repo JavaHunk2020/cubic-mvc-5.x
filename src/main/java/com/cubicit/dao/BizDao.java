@@ -2,7 +2,11 @@ package com.cubicit.dao;
 
 import java.io.IOException;
 import java.sql.Types;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cubicit.controller.Biz;
+import com.cubicit.controller.BizChild;
 
 @Repository
 public class BizDao {
@@ -125,11 +130,42 @@ public class BizDao {
 	public List<Biz> findAll(){
 		List<Biz> bizList=jdbcTemplate.query("select id,name,brand,doe from biz_service_tbl", new BeanPropertyRowMapper(Biz.class));
 		for(Biz biz:bizList){
-			String sql="select bizid from biz_photos_tbl where pid = "+biz.getId();
+			String sql="select bizid from biz_photos_tbl where pid = "+biz.getId()+" order by porder";
 			List<Integer> cimageIds=jdbcTemplate.queryForList(sql,Integer.class);
 			biz.setCimageIds(cimageIds);
 		}
 		return bizList;
+	}
+
+	public void rotateImageRight(int dbid) {
+		String sql="select bizid,porder from biz_photos_tbl where pid = "+dbid+" order by porder";
+		List<BizChild> bizChilds=jdbcTemplate.query(sql,new BeanPropertyRowMapper(BizChild.class));
+		int size=bizChilds.size();
+		BizChild fbizChild=bizChilds.get(0);
+		fbizChild.setPorder(2);
+		BizChild lbizChild=bizChilds.get(size-1);
+		lbizChild.setPorder(1);
+		int index=0;
+		for(BizChild bizChild:bizChilds){
+			index++;
+			if(index==1 || index==size){
+				continue;
+			}
+			bizChild.setPorder(index+1);
+		}
+		
+		for(BizChild bizChild:bizChilds){
+			String usql="update biz_photos_tbl set porder="+bizChild.getPorder()+" where  bizid = "+bizChild.getBizid();
+			jdbcTemplate.update(usql);
+		}
+		
+		//Map<Integer,Integer> maps=bizChilds.stream().collect(Collectors.toMap((BizChild s)->s.getBizid(), (BizChild t)->t.getPorder()));
+		/*Map<Integer,Integer> maps=new LinkedHashMap<Integer, Integer>();
+		for(BizChild bizChild:bizChilds){
+			maps.put(bizChild.getBizid(), bizChild.getPorder());
+		}*/
+		
+		
 	}
 
 }

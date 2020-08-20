@@ -51,15 +51,18 @@
         
          <img src="loadPhoto?dbid=<%=biz.getId()%>" style="height: 120px;">
          
+  
          <%
          for(Integer cid:cimageIds){ %>
-         
-         
          <img src="cloadPhoto?dbid=<%=cid%>" style="height: 120px;">
          <a href="deleteCPhoto?cid=<%=cid%>"> 
             <img src="img/del.png">
          </a>
         <% } %>
+                
+        <a href="rotateImageRight?dbid=<%=biz.getId()%>">
+   				 <button type="button" class="btn btn-danger">Right Rotation</button>
+   		 </a>
          
         </td>
         
