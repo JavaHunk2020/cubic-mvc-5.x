@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import com.cubicit.dao.BizDao;
 
 @Controller
 public class BizController {
-	
 	
   @Autowired	
   private BizDao bizDao;
@@ -44,25 +42,24 @@ public class BizController {
 	
 	
 	@PostMapping({"/editBiz"})
-	public String updateBiz(HttpServletRequest req,Model model){ //this annotation is reading did as integer from request param
-		String name=req.getParameter("name");
-		String brand=req.getParameter("brand");
-		int did=Integer.parseInt(req.getParameter("did"));
+	public String updateBiz(@RequestParam String name,@RequestParam String brand,int did,Model model){ //this annotation is reading did as integer from request param
 		Biz biz=new Biz();
 		biz.setBrand(brand);
 		biz.setName(name);
 		biz.setId(did);
 		//Here we have to update the data inside database
 		bizDao.update(biz);
-		
-		
 		model.addAttribute("message", "data is update ");
-		
-		//Fetch all new records and add inside model to show on JSP
+		return "redirect:/showBizs"; // ->> //redirect means we do not want to go to JSP
+	}
+	
+	@GetMapping({"/showBizs"})
+	public String showBizsData(Model model){
 		List<Biz> bizs=bizDao.findAll();
 		model.addAttribute("ashma", bizs);
 		return "bizs"; // ->> /bizs.jsp
 	}
+	
 	
 	
 	@GetMapping({"/editBiz"})
@@ -75,16 +72,13 @@ public class BizController {
 	
 	//http://localhost:8080/cubic-mvc/deleteBiz?name=Mocha
 	@GetMapping("/deleteBiz")
-	public String deleteBizLogic(HttpServletRequest req){
-		String pname=req.getParameter("name");
+	public String deleteBizLogic(@RequestParam("name") String pname,Model model){
 		//deleting the data from the database
 		bizDao.deleteByName(pname);
 		
 		//This is showing remining data from the database
-		req.setAttribute("message", "data is deleted with name = "+pname);
-		List<Biz> bizs=bizDao.findAll();
-		req.setAttribute("ashma", bizs);
-		return "bizs"; // ->> /bizs.jsp
+		model.addAttribute("message", "data is deleted with name = "+pname);
+		return "redirect:/showBizs"; // ->> //redirect means we do not want to go to JSP
 	}
 	
 	@GetMapping("/deleteCPhoto")
@@ -100,25 +94,15 @@ public class BizController {
 	
 	
 	//http://localhost:8080/cubic-mvc/deleteBiz?name=Mocha
-		@GetMapping("/deleteBizId")
-		public String deleteById(HttpServletRequest req){
-			String dbid=req.getParameter("id");
-			//deleting the data from the database
-			bizDao.deleteById(Integer.parseInt(dbid));
-			//This is showing remining data from the database
-			req.setAttribute("message", "data is deleted with db id = "+dbid);
-			List<Biz> bizs=bizDao.findAll();
-			req.setAttribute("ashma", bizs);
-			return "bizs"; // ->> /bizs.jsp
-		}
-	
-	
-	@GetMapping({"/showBizs"})
-	public String showBizsData(HttpServletRequest req){
-		List<Biz> bizs=bizDao.findAll();
-		req.setAttribute("ashma", bizs);
-		return "bizs"; // ->> /bizs.jsp
+	@GetMapping("/deleteBizId")
+	public String deleteById(@RequestParam("id") int dbid,Model model){
+		//deleting the data from the database
+		bizDao.deleteById(dbid);
+		//This is showing remining data from the database
+		model.addAttribute("message", "data is deleted with db id = "+dbid);
+		return "redirect:/showBizs"; // ->> //redirect means we do not want to go to JSP
 	}
+	
 	
 	//<img src="loadPhoto?dbid=12"/>
 	@GetMapping({"/loadPhoto"})

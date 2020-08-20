@@ -1,11 +1,12 @@
 package com.cubicit.controller;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class Biz {
+public class Biz implements Serializable {
 	private int id;
 	private String name;
 	private String brand;
