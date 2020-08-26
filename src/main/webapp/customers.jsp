@@ -13,7 +13,15 @@
   
   <script type="text/javascript">
   
-     function openPopup(pcid ){
+     function generateCard(){
+    	  var name=$("#tpname").val();
+		  var cid =$("#tpcid").val();
+		  // <img src="img/credit-card-front-template.jpg" id="cphoto">
+		  var tete=new Date();
+		  $("#cphoto").attr("src","loadCrediCard?cid="+cid+"&name="+name+"&time="+tete);
+     }
+  
+     function openPopup(pcid){
     	 //	@GetMapping(value="/customers",params={"cid"})
     	 fetch("v3/customers?cid="+pcid).then(function(response){
 			return response.json();//return json data to next fucntion
@@ -23,24 +31,31 @@
             //<span style="font-size: 18px" id="pname"></span>
 		    $("#pname").html("Name : "+data.name);
 		    $("#pemail").html("Email : "+data.email);
+		  
+		    //setting these values inside hidden field
+		    $("#tpname").val(data.name);
+		    $("#tpcid").val(pcid);
 		    
 		    $("#crediCardPopup").modal("show");  		    
 		});
      }
   
      function loadCustomer(){
-		console.log("Ahahaha");
 		//I have to write code to fetch data from the server using AJAX and data will come from the server
 		//in which format? json
 		//http://localhost:444/cubic-mvc/v3/customers = this is called endpoint
 		
 		//method -GET
 		//AJAX call
-		var promise=window.fetch("v3/customers");
+		//var promise=window.fetch("v3/customers");
 		fetch("v3/customers").then(function(response){
 			return response.json();
 		}).then(function(data){ //data is java script object which holds json data coming from server
 		    //data is array of javascript
+		    //
+		    var pk=[];
+		    pk.push("Nagendra");
+		    //{"cid":3,"name":"Michal","email":"michal@gmail.com","debitcard":"234204329842384","valid":"09/2022","cvv":122,"mobile":"+19282782722","photo":null,"dbphoto":null,"age":32,"company":"WIPRO"}
 		    var tdata="";
 			data.forEach((pdata)=> {
 				console.log(pdata);
@@ -82,7 +97,7 @@
    
    <table class="table table-bordered">
     <thead>
-      <tr>
+      <tr style="background-color: #50aaff;">
        <th>Cid</th>
         <th>Name</th>
         <th>Email</th>
@@ -111,6 +126,9 @@
     <div class="modal-dialog">
       <div class="modal-content" style="width: 540px;">
       
+       <input type="hidden" id="tpname">
+       <input type="hidden" id="tpcid">
+      
         <!-- Modal Header -->
         <div class="modal-header">
           <h4 class="modal-title">Customer Credit Card!</h4>
@@ -127,7 +145,7 @@
         
         <!-- Modal footer -->
         <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Generate Card</button>
+        <button type="button" class="btn btn-primary" onclick="generateCard()">Generate Card</button>
           <button type="button" class="btn btn-warning" data-dismiss="modal">Save</button>
         </div>
         
