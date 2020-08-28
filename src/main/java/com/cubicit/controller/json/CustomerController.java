@@ -40,6 +40,15 @@ public class CustomerController {
 		return applicationResponseVO;
 	}
 	
+	@PostMapping("/ccustomer")
+	public ApplicationResponseVO ccreateCustomer(@RequestBody CustomerVO customerVO){
+		System.out.println(customerVO);
+		ApplicationResponseVO applicationResponseVO=new ApplicationResponseVO();
+		applicationResponseVO.setStatus("200");
+		applicationResponseVO.setMessage("customer is added email = "+customerVO.getEmail());
+		return applicationResponseVO;
+	}
+	
 	@GetMapping(value="/customers",params={"cid"})
 	public CustomerVO getCustomerByCid(@RequestParam int  cid){
 		CustomerVO customerVO=customerDao.findByCid(cid);

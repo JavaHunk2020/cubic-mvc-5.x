@@ -13,6 +13,31 @@
   
   <script type="text/javascript">
   
+    function sendData(){
+    	  var pname=$("#pname").html();
+		  var pemail=$("#pemail").html();
+		  var cdata={name:pname,email:pemail};
+		   //convert above object into JSON
+   	     var jsonData=JSON.stringify(cdata);
+   	  
+   	   //Creating 
+   	   const options = {
+                  method: 'POST',
+                  body: jsonData,
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                  }
+                };
+   	   
+   	   var promise=fetch("v3/ccustomer",options);
+   	   promise.then(response=>response.json())
+   	   .then(function(data){
+   		   console.log(data);
+   	   });
+    	
+    }
+  
      function generateCard(){
     	  var name=$("#tpname").val();
 		  var cid =$("#tpcid").val();
@@ -146,7 +171,7 @@
         <!-- Modal footer -->
         <div class="modal-footer">
         <button type="button" class="btn btn-primary" onclick="generateCard()">Generate Card</button>
-          <button type="button" class="btn btn-warning" data-dismiss="modal">Save</button>
+          <button type="button" class="btn btn-warning" onclick="sendData();">Save</button>
         </div>
         
       </div>
