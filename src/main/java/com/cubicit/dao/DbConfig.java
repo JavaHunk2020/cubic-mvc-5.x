@@ -25,7 +25,7 @@ public class DbConfig {
 	@Bean("ma8w3y73t3636")
 	public DataSource dataSource() {
 		MysqlDataSource mysqlDS = new MysqlDataSource();
-		mysqlDS.setURL("jdbc:mysql://localhost:3306/vehicle_db?createDatabaseIfNotExist=true");
+		mysqlDS.setURL("jdbc:mysql://localhost:3306/vehicle_db?serverTimezone=UTC");
 		mysqlDS.setUser("technohunk25");
 		mysqlDS.setPassword("mysql@1234");
 		return mysqlDS;
