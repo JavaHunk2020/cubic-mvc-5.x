@@ -1,3 +1,4 @@
+
 /*
 Navicat MySQL Data Transfer
 
@@ -11,6 +12,8 @@ Target Server Version : 50730
 File Encoding         : 65001
 
 Date: 2020-08-12 03:47:28
+
+
 */
 
 SET FOREIGN_KEY_CHECKS=0;
